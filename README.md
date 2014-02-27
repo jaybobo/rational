@@ -3,7 +3,7 @@
 ##Learning Competencies 
 
 * Use Pseudocode effectively to model problem-solving
-* Model a real world system using ruby code 
+* Model a simple real-world system in Ruby code
 * Identify and implement classes based on real world requirements
 
 ##Summary 
