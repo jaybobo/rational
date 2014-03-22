@@ -17,6 +17,14 @@
 # in terms of the word "equals" for the integers -- we're equivocating
 # a bit by re-using the same word.
 
+
+
+#NOTES
+#doesn't handle least common multiples of n1 & n2 where one is not the lcm of the other
+#figure how equalsmm
+
+#doesn't handle negative numbers
+
 class RationalNumber
   attr_reader :numerator, :denominator
   
@@ -27,22 +35,77 @@ class RationalNumber
   
   # Addition
   def +(rational)
+    remainder = 0
+
+    new_num = rational.numerator * remainder
+    new_denom = rational.denominator * remainder
+
+    if denominator > rational.denominator
+      if denominator % rational.denominator == 0
+        remainder = denominator / rational.denominator
+        return RationalNumber.new(new_num + numerator, new_denom + denominator)
+      else
+        puts "can't find GCF" 
+        #workaround, muliply each denominator by its counterpart
+      end
+    elsif denominator < rational.denominator
+      if rational.denominator % denominator == 0
+        remainder = rational.denominator / denominator
+        return RationalNumber.new(new_num + numerator, new_denom + denominator)
+      else
+        puts "can't find GCF"
+      end
+    else #their equal
+      return RationalNumber.new(numerator + rational.numerator, rational.denominator)
+    end
+
   end
   
   # Subtraction
   def -(rational)
+    remainder = 0
+    
+    new_num = rational.numerator * remainder
+    new_denom = rational.denominator * remainder
+    
+    if denominator > rational.denominator
+      if denominator % rational.denominator == 0
+        remainder = denominator / rational.denominator
+        return RationalNumber.new(new_num - numerator, new_denom - denominator)
+      else
+        puts "can't find GCF" 
+        #workaround, muliply each denominator by its counterpart
+      end
+    elsif denominator < rational.denominator
+      if rational.denominator % denominator == 0
+        remainder = rational.denominator / denominator
+        return RationalNumber.new(new_num - numerator, new_denom - denominator)
+      else
+        puts "can't find GCF"
+      end
+    else #their equal
+      return RationalNumber.new(numerator - rational.numerator, rational.denominator)
+    end
+
   end
   
   # Multiplication
   def *(rational)
+    first = numerator * rational.numerator
+    second = denominator * rational.denominator
+    RationalNumber.new(first, second)
   end
   
   # Division
   def /(rational)
+    first = numerator * rational.denominator
+    second = denominator * rational.numerator
+    RationalNumber.new(first, second)
   end
   
   # Exponentiation
   def **(integer)
+    RationalNumber.new(numerator ** integer, denominator ** integer) 
   end
   
   # The reciprocal, with an example
@@ -53,14 +116,27 @@ class RationalNumber
   # For, e.g., 1/3 should return -1/3
   # That is, rat + rat.inverse == RationalNumber(0,1)
   def inverse
+    RationalNumber.new(self.numerator * -1, self.denominator)
   end
   
   # Returns true if this rational is equal the the input
   # Remember that RationalNumber.new(1,2) == RationalNumber(2,4)
   def ==(rational)
+
+    #reduce to lowest common multiple and compare
   end
   
   def to_s
     "(#{self.numerator}/#{self.denominator})"
   end
 end
+
+num1 = RationalNumber.new(1,8)
+num2 = RationalNumber.new(2,8)
+num3 = RationalNumber.new(5,10)
+p num1 + num2
+p num1 - num2
+p num1 * num2
+p num1 / num2
+p num1.inverse
+p num3 ** 2
