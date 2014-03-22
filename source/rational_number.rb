@@ -1,29 +1,10 @@
-# Remember, the rational numbers are the set of numbers
-# that can be expressed as a ratio two of integers, like
-# 1/2, 10234/567, 0/1, -4/5, etc.
-#
-# We write them as X/Y where X is called the "numerator"
-# and Y is called the "denominator."  This notation is
-# 100% convention.  We could just as easily write them
-# as (X,Y) or X:Y or X|Y.
-#
-# For this exercise it's important to think about a
-# rational number as a pair of integers with special
-# addition, subtraction, multiplication, etc. operations
-# and their own notion of equality.
-#
-# For example, we say that two rational numbers a/b and c/d
-# are "equal" if a*d equals b*c.  This "equals" is defined
-# in terms of the word "equals" for the integers -- we're equivocating
-# a bit by re-using the same word.
 
+#!!!RELEASE NOTES!!!
+#doesn't handle least common multiples of n1 & n2 
+#where one is not the lcm of the other
 
+#if n1 > n2, it does not solve if n1 is NOT already lcm of n2!
 
-#NOTES
-#doesn't handle least common multiples of n1 & n2 where one is not the lcm of the other
-#figure how equalsmm
-
-#doesn't handle negative numbers
 
 class RationalNumber
   attr_reader :numerator, :denominator
@@ -45,7 +26,7 @@ class RationalNumber
         remainder = denominator / rational.denominator
         return RationalNumber.new(new_num + numerator, new_denom + denominator)
       else
-        puts "can't find GCF" 
+        puts "denominator of first number is not LCM of second denominator" 
         #workaround, muliply each denominator by its counterpart
       end
     elsif denominator < rational.denominator
@@ -53,7 +34,7 @@ class RationalNumber
         remainder = rational.denominator / denominator
         return RationalNumber.new(new_num + numerator, new_denom + denominator)
       else
-        puts "can't find GCF"
+        puts "denominator of first number is not LCM of second denominator"
       end
     else #their equal
       return RationalNumber.new(numerator + rational.numerator, rational.denominator)
@@ -73,7 +54,7 @@ class RationalNumber
         remainder = denominator / rational.denominator
         return RationalNumber.new(new_num - numerator, new_denom - denominator)
       else
-        puts "can't find GCF" 
+        puts "denominator of first number is not LCM of second denominator"
         #workaround, muliply each denominator by its counterpart
       end
     elsif denominator < rational.denominator
@@ -81,7 +62,7 @@ class RationalNumber
         remainder = rational.denominator / denominator
         return RationalNumber.new(new_num - numerator, new_denom - denominator)
       else
-        puts "can't find GCF"
+        puts "denominator of first number is not LCM of second denominator"
       end
     else #their equal
       return RationalNumber.new(numerator - rational.numerator, rational.denominator)
@@ -122,8 +103,32 @@ class RationalNumber
   # Returns true if this rational is equal the the input
   # Remember that RationalNumber.new(1,2) == RationalNumber(2,4)
   def ==(rational)
+    state = false
 
-    #reduce to lowest common multiple and compare
+    if denominator > rational.denominator 
+      if denominator % rational.denominator == 0
+        rem = denominator / rational.denominator
+        if rem * rational.denominator == denominator && rem * rational.numerator == numerator
+          state = true
+        end
+      else
+        print "denominator of first number is not LCM of second denominator - "
+      end
+    elsif denominator < rational.denominator 
+      if denominator % rational.denominator == 0
+        remainder = rational.denominator / denominator
+        if rem * rational.denominator == denominator && rem * rational.numerator == numerator
+          state = true
+        end
+      else
+        print "denominator of first number is not LCM of second denominator - "
+      end
+    else #denominators are equal
+      if numerator == rational.numerator
+        state = true
+      end
+    end
+    state
   end
   
   def to_s
@@ -134,9 +139,15 @@ end
 num1 = RationalNumber.new(1,8)
 num2 = RationalNumber.new(2,8)
 num3 = RationalNumber.new(5,10)
+num4 = RationalNumber.new(1,2)
+num5 = RationalNumber.new(4,8)
 p num1 + num2
 p num1 - num2
 p num1 * num2
 p num1 / num2
 p num1.inverse
 p num3 ** 2
+p num4 == num4
+p num3 == num4
+p num3 == num1
+p num3 == num5
